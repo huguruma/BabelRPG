@@ -9,3 +9,13 @@ C:\Users\ia\source\repos\BabelRPG\BabelRPG\obj\Debug\BabelRPG.csproj.GenerateRes
 C:\Users\ia\source\repos\BabelRPG\BabelRPG\obj\Debug\BabelRPG.csproj.CoreCompileInputs.cache
 C:\Users\ia\source\repos\BabelRPG\BabelRPG\obj\Debug\BabelRPG.exe
 C:\Users\ia\source\repos\BabelRPG\BabelRPG\obj\Debug\BabelRPG.pdb
+C:\Users\a-uraki\source\repos\Test\BabelRPG\bin\Debug\BabelRPG.exe.config
+C:\Users\a-uraki\source\repos\Test\BabelRPG\bin\Debug\BabelRPG.exe
+C:\Users\a-uraki\source\repos\Test\BabelRPG\bin\Debug\BabelRPG.pdb
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.csproj.AssemblyReference.cache
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.Form.resources
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.Properties.Resources.resources
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.csproj.GenerateResource.cache
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.csproj.CoreCompileInputs.cache
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.exe
+C:\Users\a-uraki\source\repos\Test\BabelRPG\obj\Debug\BabelRPG.pdb

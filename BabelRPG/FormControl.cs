@@ -186,7 +186,7 @@ namespace BabelRPG
                     if (this.NameBox.Text == "")
                     {
                         this.Attension = "名前を空白にはできません。";
-                        this.startC2_1()
+                        this.start2_2();
                     }
                     else
                     {
