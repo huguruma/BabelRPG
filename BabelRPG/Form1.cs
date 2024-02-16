@@ -16,7 +16,7 @@ namespace BabelRPG
         public Form()
         {
             InitializeComponent();
-            this.formControl = new FormControl(this.FieldBox, this.MessageBox,new Button[] {this.button1,this.button2,this.button3, this.button4, this.button5, this.button6 },new Game());
+            this.formControl = new FormControl(this.FieldBox, this.MessageBox,new Button[] {this.button1,this.button2,this.button3, this.button4, this.button5, this.button6 },this.NameBox,new Game());
         }
 
 

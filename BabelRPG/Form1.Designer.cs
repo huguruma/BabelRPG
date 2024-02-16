@@ -36,6 +36,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.NameBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // FieldBox
@@ -120,11 +121,22 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // NameBox
+            // 
+            this.NameBox.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.NameBox.Location = new System.Drawing.Point(588, 773);
+            this.NameBox.MaxLength = 8;
+            this.NameBox.Name = "NameBox";
+            this.NameBox.Size = new System.Drawing.Size(119, 26);
+            this.NameBox.TabIndex = 8;
+            this.NameBox.Visible = false;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 853);
+            this.Controls.Add(this.NameBox);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -154,6 +166,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox NameBox;
     }
 }
 
