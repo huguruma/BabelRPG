@@ -12,20 +12,23 @@ namespace BabelRPG
         private string Head = "";
         private string Body = "";
         private string MsgWin = "";
+        private string Attension = "";
         private int Input = 0;
 
         private TextBox Field;
         private TextBox Win;
         private Button[] Buttons;
+        private TextBox NameBox;
         private Game GameController;
         private delegate void Next();
         Next next;
 
-        public FormControl(TextBox field, TextBox win, Button[] buttons, Game gameController)
+        public FormControl(TextBox field, TextBox win, Button[] buttons, TextBox nameBox,Game gameController)
         {
             this.Field = field;
             this.Win = win;
             this.Buttons = buttons;
+            this.NameBox = nameBox;
             this.GameController = gameController;
         }
 
@@ -38,7 +41,8 @@ namespace BabelRPG
         private void DisplayGame()
         {
             this.Field.Text = this.Head + "\r\n\r\n" + this.Body;
-            this.Win.Text = this.MsgWin;
+            this.Win.Text = this.MsgWin + "\r\n" + this.Attension;
+            this.Attension = "";
         }
         private void DisplayField()
         {
@@ -103,6 +107,7 @@ namespace BabelRPG
 
         public void start2()
         {
+            this.Head += ">>新規作成";
             this.Body = "既にあるデータは削除されます。よろしいですか？";
             this.MsgWin = "選択してください。";
 
@@ -111,8 +116,31 @@ namespace BabelRPG
             this.next = this.startC2;
         }
 
+        public void start2_1()
+        {
+            this.Body = "あなたの名前を教えて下さい。";
+            this.MsgWin = "テキストボックスに主人公の名前を入力してください。";
+            this.NameBox.Visible = true;
+
+            this.DisplayGame();
+            this.SetButton("入力完了", "やっぱりやめる");
+            this.next = this.startC2_1;
+        }
+
+        public void start2_2()
+        {
+            this.Body = "あなたの名前を教えて下さい。";
+            this.MsgWin = "テキストボックスに主人公の名前を入力してください。";
+            this.NameBox.Visible = true;
+
+            this.DisplayGame();
+            this.SetButton("入力完了", "やっぱりやめる");
+            this.next = this.startC2_1;
+        }
+
         public void start3()
         {
+            this.Head += ">>続きから";
             this.GameController.SetData(false);
             this.Body = "こちらのデータで開始します。よろしいですか？\r\n"
                 + this.GameController.PData.ShowAllStatus();
@@ -142,7 +170,28 @@ namespace BabelRPG
             switch (this.Input)
             {
                 case 1:
-                    this.T();
+                    this.start2_1();
+                    break ;
+                case 2:
+                    this.start1();
+                    break;
+            }
+        }
+
+        public void startC2_1()
+        {
+            switch (this.Input)
+            {
+                case 1:
+                    if (this.NameBox.Text == "")
+                    {
+                        this.Attension = "名前を空白にはできません。";
+                        this.startC2_1()
+                    }
+                    else
+                    {
+                        this.start2_2();
+                    }
                     break;
                 case 2:
                     this.start1();
