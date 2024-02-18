@@ -21,5 +21,10 @@ namespace BabelRPG
                 this.AllItems.Add(new Item(sList[0], sList[1], int.Parse(sList[2]), new int[] { int.Parse(sList[3]), int.Parse(sList[4]), int.Parse(sList[5]), int.Parse(sList[6]) }));
             }
         }
+        public List<string> GetAllItemIntro(Dictionary<Item, int> MyItems)
+        {
+            List<Item> iList = MyItems.Keys.ToList();
+            return iList.Select(x => x.Intro() + " " + MyItems[x]).ToList();
+        }
     }
 }

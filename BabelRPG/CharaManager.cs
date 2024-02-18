@@ -13,6 +13,7 @@ namespace BabelRPG
     internal class CharaManager
     {
         public List<Creature> AllCreatures=new List<Creature>();
+        private Encoding SjisEnc = Encoding.GetEncoding("Shift_JIS");
 
         public void SetAllCreatures()
         {
@@ -98,32 +99,17 @@ namespace BabelRPG
         public List<string> GetStatus(Chara c1)
         {
             List<string> status = new List<string>();
-            int padSize = 25;
-            int diff = 0;
-            status.Add(this.GetDiff(c1.Name + " Lv" + c1.Level, out diff).PadRight(padSize - diff));
-            status.Add(this.GetDiff("HP  :" + c1.HP + "(+" + c1.Equip.BonusParams[0] + ")",out diff).PadRight(padSize-diff));
-            status.Add(this.GetDiff("攻撃 :" + c1.Attack +"(+"+ c1.Equip.BonusParams[1]+")", out diff).PadRight(padSize - diff));
-            status.Add(this.GetDiff("防御 :" + c1.Deffence + "(+" + c1.Equip.BonusParams[2] + ")", out diff).PadRight(padSize - diff));
-            status.Add(this.GetDiff("素早さ:" + c1.Speed + "(+" + c1.Equip.BonusParams[3] + ")", out diff).PadRight(padSize - diff));
-            status.Add(this.GetDiff("装備アイテム:" + c1.Equip.Name, out diff).PadRight(padSize - diff));
 
-            Console.WriteLine(string.Join(",",status));
+            status.Add(this.RemakeWide((this.RemakeWide(c1.Name,8,' ') + " Lv" + c1.Level),30,' '));
+            status.Add(this.RemakeWide(("HP          :" + c1.RecentHP +"/"+c1.HP+ "("+ (c1.Equip.BonusParams[0] >= 0 ? "+" : "") + c1.Equip.BonusParams[0] + ")"), 30, ' '));
+            status.Add(this.RemakeWide(("攻撃        :" + c1.Attack +"("+ (c1.Equip.BonusParams[1] >= 0 ? "+" : "") + c1.Equip.BonusParams[1]+")"), 30, ' '));
+            status.Add(this.RemakeWide(("防御        :" + c1.Deffence + "(" + (c1.Equip.BonusParams[2] >= 0 ? "+" : "")+ c1.Equip.BonusParams[2] + ")"), 30, ' '));
+            status.Add(this.RemakeWide(("素早さ      :" + c1.Speed + "(" + (c1.Equip.BonusParams[3] >= 0 ? "+" : "")+ c1.Equip.BonusParams[3] + ")"), 30, ' '));
+            status.Add(this.RemakeWide(("装備アイテム:" + c1.Equip.Name), 30, ' '));
+
             return status;
         }
 
-        public string GetDiff(string str,out int diff)
-        {
-            int count=0;
-            foreach(char c in str)
-            {
-                if(!Regex.IsMatch(new string(c,1), @"[ -~｡-ﾟ]"))
-                {
-                    count++;
-                }
-            }
-            diff=count;
-            return str;
-        }
 
         public List<string> GetAllStatus(List<Chara> cList)
         {
@@ -145,5 +131,14 @@ namespace BabelRPG
             }
             return strings;
         }
+
+        private string RemakeWide(string str, int num, char pad)
+        {
+            int bytes = this.SjisEnc.GetByteCount(str);
+            return str + new string(pad, num - bytes);
+        }
+
     }
+
+
 }

@@ -12,6 +12,8 @@ namespace BabelRPG
         public CharaManager CMng;
         public PlayData PData;
         private int NowFloor=0;
+        public string Name = "";
+        public string JobType = "";
 
 
         public Game()
@@ -27,7 +29,7 @@ namespace BabelRPG
         {
             if (isNewGame)
             {
-                this.PData = new PlayData(true, this.IMng, this.CMng, name, jobType);
+                this.PData = new PlayData(true, this.IMng, this.CMng,this.Name,this.JobType);
             }
             else
             {

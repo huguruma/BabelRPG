@@ -145,7 +145,7 @@ namespace BabelRPG
         private string Attack(Chara c1, Chara c2, bool isEnemy = false)
         {
             Random random = new Random();
-            int damage = 10 * c1.Attack / c2.Deffence * c1.Level / c2.Level * (90 + random.Next(11)) / 100;
+            int damage = 10 * c1.Attack / (c2.Deffence+1) * c1.Level / c2.Level * (90 + random.Next(11)) / 100;
             if (c2.RecentHP > damage)
             {
                 c2.RecentHP -= damage;
@@ -166,18 +166,7 @@ namespace BabelRPG
             log += this.PData.Name + "は" + c1.Name + "に" + i1 + "を使用。\r\n";
             if (c1.RecentHP > 0)
             {
-                if (c1.HP > c1.RecentHP + i1.BonusParams[0])
-                {
-                    log += c1.Name + "は" + i1.BonusParams[0] + "回復。\r\n";
-                    c1.RecentHP += i1.BonusParams[0];
-                    this.PData.UseItem(i1.Name);
-                }
-                else
-                {
-                    log += c1.Name + "は" + (c1.HP - i1.BonusParams[0]) + "回復。\r\n";
-                    c1.RecentHP = c1.HP;
-                    this.PData.UseItem(i1.Name);
-                }
+                log+=this.PData.UseItem(c1,i1);
             }
             else
             {
@@ -202,13 +191,15 @@ namespace BabelRPG
                 int i = 0;
                 foreach(Chara c1 in this.PData.MyCharas)
                 {
+                    int pastHP = c1.HP;
                     log += c1.Name + "は" + this.GotExp[i] + "Exp獲得！\r\n";
                     c1.Exp += this.GotExp[i];
+                    c1.RecentHP=c1.HP-pastHP;
                 }
                 foreach(string i1 in this.GotItems)
                 {
                     log += i1 + "をゲット!\r\n";
-                    this.PData.GetItem(i1);
+                    this.PData.PutItem(i1);
                 }
             }else if(this.PData.MyCharas[0].RecentHP == 0)
             {

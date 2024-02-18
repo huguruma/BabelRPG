@@ -42,9 +42,9 @@
             // FieldBox
             // 
             this.FieldBox.Enabled = false;
-            this.FieldBox.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.FieldBox.Font = new System.Drawing.Font("ＭＳ ゴシック", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FieldBox.Location = new System.Drawing.Point(16, 15);
-            this.FieldBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.FieldBox.Margin = new System.Windows.Forms.Padding(4);
             this.FieldBox.Multiline = true;
             this.FieldBox.Name = "FieldBox";
             this.FieldBox.ReadOnly = true;
@@ -54,9 +54,9 @@
             // MessageBox
             // 
             this.MessageBox.Enabled = false;
-            this.MessageBox.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.MessageBox.Font = new System.Drawing.Font("ＭＳ ゴシック", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.MessageBox.Location = new System.Drawing.Point(16, 499);
-            this.MessageBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MessageBox.Margin = new System.Windows.Forms.Padding(4);
             this.MessageBox.Multiline = true;
             this.MessageBox.Name = "MessageBox";
             this.MessageBox.ReadOnly = true;
@@ -65,8 +65,9 @@
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button1.Location = new System.Drawing.Point(16, 745);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(1);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(97, 98);
             this.button1.TabIndex = 2;
@@ -76,8 +77,9 @@
             // 
             // button2
             // 
+            this.button2.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button2.Location = new System.Drawing.Point(143, 745);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(97, 98);
             this.button2.TabIndex = 3;
@@ -87,8 +89,9 @@
             // 
             // button3
             // 
+            this.button3.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button3.Location = new System.Drawing.Point(271, 745);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(97, 98);
             this.button3.TabIndex = 4;
@@ -98,8 +101,9 @@
             // 
             // button4
             // 
+            this.button4.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button4.Location = new System.Drawing.Point(395, 745);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(97, 98);
             this.button4.TabIndex = 5;
@@ -109,8 +113,9 @@
             // 
             // button5
             // 
+            this.button5.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button5.Location = new System.Drawing.Point(520, 745);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(97, 98);
             this.button5.TabIndex = 6;
@@ -120,8 +125,9 @@
             // 
             // button6
             // 
+            this.button6.Font = new System.Drawing.Font("MS UI Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.button6.Location = new System.Drawing.Point(645, 745);
-            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button6.Margin = new System.Windows.Forms.Padding(4);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(97, 98);
             this.button6.TabIndex = 7;
@@ -133,7 +139,7 @@
             // 
             this.NameBox.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.NameBox.Location = new System.Drawing.Point(784, 757);
-            this.NameBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.NameBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameBox.MaxLength = 8;
             this.NameBox.Name = "NameBox";
             this.NameBox.Size = new System.Drawing.Size(157, 31);
@@ -155,7 +161,7 @@
             this.Controls.Add(this.MessageBox);
             this.Controls.Add(this.FieldBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form";

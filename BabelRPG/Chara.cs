@@ -31,7 +31,7 @@ namespace BabelRPG
             this.BaseSpeed = baseSpeed;
             this.Equip = equip;
             this.LevelBonusMagnif = levelBonusMagnif;
-            RecentHP = 0;
+            RecentHP = this.HP;
         }
 
         public int Level
@@ -55,7 +55,7 @@ namespace BabelRPG
         {
             get
             {
-                return this.BaseHP + (int)Math.Floor(LevelBonusMagnif[0] * (double)this.Level) + this.Equip.BonusParams[0];
+                return this.BaseHP + (int)Math.Floor(LevelBonusMagnif[0] * (double)this.Level) + this.Equip.BonusParams[0]<0?0: this.BaseHP + (int)Math.Floor(LevelBonusMagnif[0] * (double)this.Level) + this.Equip.BonusParams[0];
             }
         }
 
@@ -63,7 +63,7 @@ namespace BabelRPG
         {
             get
             {
-                return this.BaseAttack + (int)Math.Floor(LevelBonusMagnif[1] * (double)this.Level) + this.Equip.BonusParams[1];
+                return this.BaseAttack + (int)Math.Floor(LevelBonusMagnif[1] * (double)this.Level) + this.Equip.BonusParams[1]<0?0: this.BaseAttack + (int)Math.Floor(LevelBonusMagnif[1] * (double)this.Level) + this.Equip.BonusParams[1];
             }
         }
 
@@ -71,7 +71,7 @@ namespace BabelRPG
         {
             get
             {
-                return this.BaseDeffence + (int)Math.Floor(LevelBonusMagnif[2] * (double)this.Level) + this.Equip.BonusParams[2];
+                return this.BaseDeffence + (int)Math.Floor(LevelBonusMagnif[2] * (double)this.Level) + this.Equip.BonusParams[2] < 0 ? 0 : this.BaseDeffence + (int)Math.Floor(LevelBonusMagnif[2] * (double)this.Level) + this.Equip.BonusParams[2];
             }
         }
 
@@ -79,7 +79,7 @@ namespace BabelRPG
         {
             get
             {
-                return this.BaseSpeed + (int)Math.Floor(LevelBonusMagnif[3] * (double)this.Level) + this.Equip.BonusParams[3];
+                return this.BaseSpeed + (int)Math.Floor(LevelBonusMagnif[3] * (double)this.Level) + this.Equip.BonusParams[3] < 0 ? 0 : this.BaseSpeed + (int)Math.Floor(LevelBonusMagnif[3] * (double)this.Level) + this.Equip.BonusParams[3];
             }
         }
 

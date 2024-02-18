@@ -28,6 +28,11 @@ namespace BabelRPG
         {
             return (Item)MemberwiseClone();
         }
+
+        public string Intro()
+        {
+            return this.Name.PadRight(10) + (this.ItemType == 0 ? "装備アイテム" : "使用アイテム");
+        }
     }
 }
 
