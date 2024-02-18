@@ -11,10 +11,12 @@ namespace BabelRPG
         public ItemManager IMng;
         public CharaManager CMng;
         public PlayData PData;
-        private int NowFloor=0;
+        public BattleManager BMng;
+        public LogManager LMng;
+        public int NowFloor=0;
         public string Name = "";
         public string JobType = "";
-
+        public int Command = 0;
 
         public Game()
         {
@@ -36,7 +38,16 @@ namespace BabelRPG
                 this.PData = new PlayData(false, this.IMng, this.CMng);
             }
         }
+        
+        public void SetBattleManager()
+        {    
+            this.BMng=new BattleManager(this.IMng,this.CMng,this.PData,this.NowFloor);
+        }
 
+        public void SetLogManager(int input)
+        {
+            this.LMng = new LogManager(this.BMng.BattlePhase(this.Command, input-1), 12);
+        }
         public void MainFrame()
         {
 

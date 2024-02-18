@@ -55,6 +55,7 @@
     <Compile Include="FormControl.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="ItemMenuManager.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="PlayData.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="Form1.cs">

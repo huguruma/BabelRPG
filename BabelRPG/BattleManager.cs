@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,58 +11,61 @@ namespace BabelRPG
 {
     internal class BattleManager
     {
-        ItemManager IMng;
-        CharaManager CMng;
-        PlayData PData;
-        List<List<Creature>> AllEncount;
+        private ItemManager IMng;
+        private CharaManager CMng;
+        private PlayData PData;
+        public List<List<Creature>> AllEncount;
+        private int NowFloor;
         Chara Caught = null;
         public int BattleCount = 0;
         public bool BattleNow = false;
         public List<int> GotExp = new List<int>();
         public List<string> GotItems = new List<string>();
         public bool EscapeFlg = false;
+        public bool BattleResult = false;
 
         public BattleManager(ItemManager iMng, CharaManager cMng, PlayData pData, int floor)
         {
             this.IMng = iMng;
             this.CMng = cMng;
             this.PData = pData;
-            this.AllEncount = this.CMng.FloorEncount(floor);
+            this.NowFloor = floor;
+            this.AllEncount = this.CMng.FloorEncount(this.NowFloor);
         }
 
         public string BattlePhase(int input,int target=-1,string i1="")
         {
+            string log = "";
             this.BattleNow = true;
             if (!this.CheckBattleFinished())
             {
                 if (input == 0 || input == 1 || input == 3)
                 {
-                    return Battle(input, target, i1);
+                    log+= Battle(input, target, i1);
                 }
             }
-            else
+            if (this.CheckBattleFinished())
             {
                 List<string> result = this.Result();
-                switch (result[1])
+                switch (result[0])
                 {
                     case "win":
-                        this.BattleCount++;
-                        return "Victory!!\r\n\r\n" + result[2];
+                        this.BattleResult = true;
+                        log+= "Victory!!\r\n" + result[1];
+                        break;
                     case "lose":
-                        this.BattleCount = -1;
-                        return "You Lose... \r\n\r\n"+result[2];
+                        this.BattleResult = false;
+                        log+="You Lose... \r\n"+result[1];
+                        break;
                     case "esc":
-                        this.BattleCount++;
-                        return "バトルから離脱した! \r\n\r\n" + result[2];
+                        this.BattleResult = true;
+                        log+= "バトルから離脱した! \r\n" + result[1];
+                        break;
                 }
             }
-            return "";
+            return log;
         }
 
-        private List<string> texts(string head = "", string body = "", string msgBox = "")
-        {
-            return new List<string> { head, body, msgBox };
-        }
 
         private string Battle(int command, int target = 0, string i1 = "")
         {
@@ -72,7 +76,7 @@ namespace BabelRPG
             {
                 if (this.CheckBattleFinished()) break;
 
-                if (c1.RecentHP == 0)
+                if (c1.RecentHP != 0)
                 {
                     if (this.PData.MyCharas.Any(x => x == c1))
                     {
@@ -86,7 +90,7 @@ namespace BabelRPG
                                 case 2:
                                     log += this.UseItemFor(this.PData.MyCharas[target], this.PData.MyItems.Keys.ToList().Find(x => x.Name == i1));
                                     break;
-                                case 3:
+                                case 4:
                                     log += this.PData.Name + (this.PData.MyCharas.Count() > 1 ? "達" : "" + "は逃げ出した!\r\n");
                                     if (rand.Next(100) < Math.Pow(this.PData.MyCharas[0].Level / this.AllEncount[BattleCount][0].Level, 2) * 100)
                                     {
@@ -106,9 +110,10 @@ namespace BabelRPG
                             log += this.Attack(c1, this.AllEncount[BattleCount][rand.Next(this.AllEncount[BattleCount].Count())]);
                         }
 
+                        List<Creature> removeList = new List<Creature>();
                         foreach (Creature c2 in this.AllEncount[BattleCount].Where(x => x.RecentHP == 0))
                         {
-                            this.AllEncount[BattleCount].Remove(c2);
+                            removeList.Add(c2);
                             foreach (string i2 in c2.DropItems.Keys)
                             {
                                 if (rand.Next(10) < c2.DropItems[i2] * 10)
@@ -119,10 +124,12 @@ namespace BabelRPG
                                 }
                             }
                             int i = 0;
+                            this.GotExp=new int[this.PData.MyCharas.Count].ToList();
                             foreach (Chara c3 in this.PData.MyCharas)
                             {
-                                GotExp[i] += c2.Exp / 3 * c2.Level / c3.Level;
+                                this.GotExp[i]+=(c2.Exp / 10 * c2.Level / c3.Level);
                                 i++;
+                                
                             }
                             if (this.Caught != null)
                             {
@@ -131,6 +138,10 @@ namespace BabelRPG
                                     this.Caught = c2;
                                 }
                             }
+                        }
+                        foreach(Creature c2 in removeList)
+                        {
+                            this.AllEncount[BattleCount].Remove(c2);
                         }
                     }
                     else
@@ -154,7 +165,7 @@ namespace BabelRPG
             {
                 c2.RecentHP = 0;
             }
-            string log = c1.Name + "の攻撃！\r\n" + c2.Name + "は" + damage + "のダメージ！\r\n" + (c2.RecentHP == 0 ? (isEnemy ? "敵の" : "") + c2.Name + "は倒れた！\r\n" : "");
+            string log = (isEnemy ? "敵の" : "")+c1.Name + "の攻撃！\r\n" +( !isEnemy ? "敵の" : "") +c2.Name + "は" + damage + "のダメージ！\r\n" + (c2.RecentHP == 0 ? (!isEnemy ? "敵の" : "") + c2.Name + "は倒れた！\r\n" : "");
 
             return log;
         }
@@ -177,7 +188,7 @@ namespace BabelRPG
 
         public bool CheckBattleFinished()
         {
-            return this.AllEncount.Count() == 0 || this.PData.MyCharas[0].RecentHP == 0 || this.EscapeFlg;
+            return this.AllEncount[this.BattleCount].Count() == 0 || this.PData.MyCharas[0].RecentHP == 0 || this.EscapeFlg;
         }
 
         public List<string> Result()
@@ -185,7 +196,7 @@ namespace BabelRPG
             string result = "";
             string log = "";
 
-            if (this.AllEncount.Count() == 0 ||this.EscapeFlg)
+            if (this.AllEncount[this.BattleCount].Count() == 0 ||this.EscapeFlg)
             {
                 result = this.EscapeFlg ? "esc":"win";
                 int i = 0;
@@ -194,7 +205,7 @@ namespace BabelRPG
                     int pastHP = c1.HP;
                     log += c1.Name + "は" + this.GotExp[i] + "Exp獲得！\r\n";
                     c1.Exp += this.GotExp[i];
-                    c1.RecentHP=c1.HP-pastHP;
+                    c1.RecentHP+=c1.HP-pastHP;
                 }
                 foreach(string i1 in this.GotItems)
                 {
@@ -218,5 +229,75 @@ namespace BabelRPG
 
             return new List<string> { result, log };
         }
+
+        public string GetImage()
+        {
+            return string.Join("\r\n", this.GetAllEnemyImage(), "\r\n\r\n\r\n", this.GetAllMyCharaImage());
+
+        }
+
+        public string GetAllEnemyImage()
+        {
+            if (this.AllEncount[this.BattleCount].Count == 0) return "\r\n\r\n";
+            List<List<string>> allEnemy = new List<List<string>>();
+            List<string> strings = new List<string>();
+            foreach (Creature c1 in this.AllEncount[this.BattleCount])
+            {
+                allEnemy.Add(this.GetEnemyImage(c1));
+            }
+
+            for (int i = 0; i < allEnemy[0].Count(); i++)
+            {
+                strings.Add("");
+                for (int j = 0; j < allEnemy.Count(); j++)
+                {
+                    strings[i] += allEnemy[j][i] + "    ";
+
+                }
+            }
+            return string.Join("\r\n",strings);
+        }
+
+        public List<string> GetEnemyImage(Creature c1)
+        {
+            List<string> sList = new List<string>();
+            sList.Add(("▷"+new string('□', 9))+"◁");
+            sList.Add((c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2)).PadRight(20));
+            sList.Add(("[" +(new string('▮',(int)Math.Floor((double)(((double)c1.RecentHP/c1.HP)*10)))).PadRight(10) +"]").PadRight(20));
+            
+            return sList;
+        }
+
+        public string GetAllMyCharaImage()
+        {
+            List<List<string>> allChara = new List<List<string>>();
+            List<string> strings = new List<string>();
+            foreach (Chara c1 in this.PData.MyCharas)
+            {
+                allChara.Add(this.GetMyCharaImage(c1));
+            }
+
+            for (int i = 0; i < allChara[0].Count(); i++)
+            {
+                strings.Add("");
+                for (int j = 0; j < allChara.Count(); j++)
+                {
+                    strings[i] += allChara[j][i] + "    ";
+
+                }
+            }
+            return string.Join("\r\n", strings);
+        }
+
+        public List<string> GetMyCharaImage(Chara c1)
+        {
+            List<string> sList = new List<string>();
+            sList.Add("▶"+(new string('■', 9))+"◀");
+            sList.Add((c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2)).PadRight(20));
+            sList.Add(("HP:  " + c1.RecentHP.ToString().PadLeft(4) + "/" + c1.HP ).PadRight(20));
+            return sList;
+        }
     }
+
+
 }

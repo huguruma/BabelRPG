@@ -38,8 +38,20 @@ namespace BabelRPG
 
         public List<Creature> AllFloorCreatures(int floor)
         {
-            if (floor % 10 == 0) { return this.AllCreatures.Where(x => x.PopFloorMin == floor && x.PopFloorMax == floor).ToList(); }
-            return this.AllCreatures.Where(x => x.PopFloorMin ==  x.PopFloorMax && x.PopFloorMin <= floor && x.PopFloorMax >= floor).OrderBy(x=>x.PopFloorMin).ToList();
+            List<Creature> cList;
+            if (floor % 10 == 0) { 
+                cList = this.AllCreatures.Where(x => x.PopFloorMin == floor && x.PopFloorMax == floor).ToList();
+            }
+            else
+            {
+                cList = this.AllCreatures.Where(x => x.PopFloorMin != x.PopFloorMax && x.PopFloorMin <= floor && x.PopFloorMax >= floor).OrderBy(x => x.PopFloorMin).ToList();
+            }
+            foreach(Creature c1 in cList)
+            {
+                c1.Exp = 300 * floor + 1000 * (int)Math.Pow((floor / 10) + 1, 2)-500;
+                c1.RecentHP = c1.HP;
+            }
+            return cList;
         }
 
         public int PopCount(int floor)
@@ -57,6 +69,10 @@ namespace BabelRPG
             int popCount = this.PopCount(floor);
             List<int> creatureMaps=new List<int>();
             Random random = new Random();
+            if (floor % 10 == 0)
+            {
+                return allCreatures;
+            }
             for (int i = 0; i < allCreatures.Count();i++)
             {
                 for(int j = 0; j <= allCreatures.Count - i; j++)
@@ -80,6 +96,7 @@ namespace BabelRPG
         }
         public List<List<Creature>> FloorEncount(int floor)
         {
+            floor++;
             int encCount = this.EncCount(floor);
             List<List<Creature>> allEncount=new List<List<Creature>>();
             if (floor % 10 == 0)

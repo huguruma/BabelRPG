@@ -72,6 +72,7 @@ namespace BabelRPG
                 sList = str.Split(',');
                 c1=this.CMng.AllCreatures.Find(x => x.Name == sList[0]).Clone();
                 c1.Exp = int.Parse(sList[1]);
+                c1.RecentHP = c1.HP;
                 if (sList[2] != "") 
                 {
                     i1= IMng.AllItems.Find(x => x.Name == sList[2]).Clone(); 
