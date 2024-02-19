@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,9 +45,9 @@ namespace BabelRPG
             this.BMng=new BattleManager(this.IMng,this.CMng,this.PData,this.NowFloor);
         }
 
-        public void SetLogManager(int input)
+        public void SetLogManager(int input,string i1="")
         {
-            this.LMng = new LogManager(this.BMng.BattlePhase(this.Command, input-1), 12);
+            this.LMng = new LogManager(this.BMng.BattlePhase(this.Command, input-1,i1), 10);
         }
         public void MainFrame()
         {

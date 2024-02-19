@@ -26,7 +26,7 @@ namespace BabelRPG
         {
             this.Log = log;
             this.Range = range;
-            List<string> sList = log.Split(new string[] { "\r\n" }, StringSplitOptions.None).ToList();
+            List<string> sList = log.Split(new string[] { "\r\n" }, StringSplitOptions.None).Where(x=>x!="").ToList();
             this.MaxPage = sList.Count / range + (sList.Count() % range == 0 ? 0 : 1)-1;
             this.MaxIndex = sList.Count - 1;
             int index = 0;

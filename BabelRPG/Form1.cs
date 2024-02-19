@@ -22,7 +22,7 @@ namespace BabelRPG
 
         private void Form_Load(object sender, EventArgs e)
         {
-            this.formControl.start1();
+            this.formControl.Start1();
         }
 
         private void button1_Click(object sender, EventArgs e)

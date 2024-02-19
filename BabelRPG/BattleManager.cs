@@ -16,13 +16,14 @@ namespace BabelRPG
         private PlayData PData;
         public List<List<Creature>> AllEncount;
         private int NowFloor;
-        Chara Caught = null;
+        public Chara Caught = null;
         public int BattleCount = 0;
         public bool BattleNow = false;
         public List<int> GotExp = new List<int>();
         public List<string> GotItems = new List<string>();
         public bool EscapeFlg = false;
         public bool BattleResult = false;
+        private Encoding SjisEnc = Encoding.GetEncoding("Shift_JIS");
 
         public BattleManager(ItemManager iMng, CharaManager cMng, PlayData pData, int floor)
         {
@@ -31,6 +32,7 @@ namespace BabelRPG
             this.PData = pData;
             this.NowFloor = floor;
             this.AllEncount = this.CMng.FloorEncount(this.NowFloor);
+            this.GotExp = new int[this.PData.MyCharas.Count].ToList();
         }
 
         public string BattlePhase(int input,int target=-1,string i1="")
@@ -39,7 +41,7 @@ namespace BabelRPG
             this.BattleNow = true;
             if (!this.CheckBattleFinished())
             {
-                if (input == 0 || input == 1 || input == 3)
+                if (input == 1 || input == 2 || input == 4)
                 {
                     log+= Battle(input, target, i1);
                 }
@@ -62,6 +64,7 @@ namespace BabelRPG
                         log+= "バトルから離脱した! \r\n" + result[1];
                         break;
                 }
+                
             }
             return log;
         }
@@ -92,14 +95,14 @@ namespace BabelRPG
                                     break;
                                 case 4:
                                     log += this.PData.Name + (this.PData.MyCharas.Count() > 1 ? "達" : "" + "は逃げ出した!\r\n");
-                                    if (rand.Next(100) < Math.Pow(this.PData.MyCharas[0].Level / this.AllEncount[BattleCount][0].Level, 2) * 100)
+                                    if (rand.Next(100) < Math.Pow(this.PData.MyCharas[0].Level / this.AllEncount[BattleCount][0].Level, 2) * 80)
                                     {
                                         this.EscapeFlg = true;
-                                        log += "なんとか逃げ切れた!\r\n";
+                                        log += "はなんとか逃げ切れた!\r\n";
                                     }
                                     else
                                     {
-                                        log += "逃げ切れなかった!\r\n";
+                                        log += "は逃げ切れなかった!\r\n";
                                     }
                                     break;
                             }
@@ -124,16 +127,15 @@ namespace BabelRPG
                                 }
                             }
                             int i = 0;
-                            this.GotExp=new int[this.PData.MyCharas.Count].ToList();
                             foreach (Chara c3 in this.PData.MyCharas)
                             {
-                                this.GotExp[i]+=(c2.Exp / 10 * c2.Level / c3.Level);
+                                this.GotExp[i]+=(int)(c2.Exp / 3 * Math.Pow((double)(10+c2.Level) / (10+c3.Level),2));
                                 i++;
                                 
                             }
-                            if (this.Caught != null)
+                            if (this.Caught == null)
                             {
-                                if (rand.Next(100) < c2.CatchPer && this.PData.MyCharas.Count() < 3)
+                                if (rand.Next(100)+1 < c2.CatchPer && this.PData.MyCharas.Count() < 5 && this.PData.MyCharas.All(x=>x.Name!=c2.Name))
                                 {
                                     this.Caught = c2;
                                 }
@@ -156,7 +158,7 @@ namespace BabelRPG
         private string Attack(Chara c1, Chara c2, bool isEnemy = false)
         {
             Random random = new Random();
-            int damage = 10 * c1.Attack / (c2.Deffence+1) * c1.Level / c2.Level * (90 + random.Next(11)) / 100;
+            int damage = (c1.Level+30)/2 * (c1.Attack+c1.Level) / (c2.Deffence+c2.Level) *  (90 + random.Next(11)) / 100;
             if (c2.RecentHP > damage)
             {
                 c2.RecentHP -= damage;
@@ -174,7 +176,7 @@ namespace BabelRPG
         {
             string log = "";
 
-            log += this.PData.Name + "は" + c1.Name + "に" + i1 + "を使用。\r\n";
+            log += this.PData.Name + "は" + c1.Name + "に" + i1.Name + "を使用。\r\n";
             if (c1.RecentHP > 0)
             {
                 log+=this.PData.UseItem(c1,i1);
@@ -203,9 +205,13 @@ namespace BabelRPG
                 foreach(Chara c1 in this.PData.MyCharas)
                 {
                     int pastHP = c1.HP;
-                    log += c1.Name + "は" + this.GotExp[i] + "Exp獲得！\r\n";
-                    c1.Exp += this.GotExp[i];
-                    c1.RecentHP+=c1.HP-pastHP;
+                    if (this.GotExp[i] != 0)
+                    {
+                        log += c1.Name + "は" + this.GotExp[i] + "Exp獲得！\r\n";
+                        c1.Exp += this.GotExp[i];
+                        c1.RecentHP += c1.HP - pastHP;
+                    }
+                    i++;
                 }
                 foreach(string i1 in this.GotItems)
                 {
@@ -223,11 +229,18 @@ namespace BabelRPG
                 }
                 log += "\r\n" + this.PData.Name + (this.PData.MyCharas.Count() > 1 ? "達" : "") + "は塔から撤退した...\r\n";
             }
-            this.GotExp.Clear();
+            this.GotExp = new int[this.PData.MyCharas.Count].ToList();
             this.GotItems.Clear();
             this.BattleNow = false;
+            this.EscapeFlg = false;
 
             return new List<string> { result, log };
+        }
+
+        private string RemakeWide(string str, int num, char pad)
+        {
+            int bytes = this.SjisEnc.GetByteCount(str);
+            return str + new string(pad, num - bytes);
         }
 
         public string GetImage()
@@ -261,9 +274,9 @@ namespace BabelRPG
         public List<string> GetEnemyImage(Creature c1)
         {
             List<string> sList = new List<string>();
-            sList.Add(("▷"+new string('□', 9))+"◁");
-            sList.Add((c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2)).PadRight(20));
-            sList.Add(("[" +(new string('▮',(int)Math.Floor((double)(((double)c1.RecentHP/c1.HP)*10)))).PadRight(10) +"]").PadRight(20));
+            sList.Add(this.RemakeWide(("▷"+new string('□', 11))+"◁",24,' '));
+            sList.Add(this.RemakeWide((c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2)),24,' '));
+            sList.Add(this.RemakeWide("[" +(new string('▮',(int)Math.Floor((double)(((double)c1.RecentHP/c1.HP)*20)))).PadRight(20) +"]",24,' '));
             
             return sList;
         }
@@ -292,9 +305,10 @@ namespace BabelRPG
         public List<string> GetMyCharaImage(Chara c1)
         {
             List<string> sList = new List<string>();
-            sList.Add("▶"+(new string('■', 9))+"◀");
-            sList.Add((c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2)).PadRight(20));
-            sList.Add(("HP:  " + c1.RecentHP.ToString().PadLeft(4) + "/" + c1.HP ).PadRight(20));
+            sList.Add("▶"+(new string('■', 11))+"◀");
+            sList.Add(this.RemakeWide(c1.Name.PadRight(10) + "Lv" + c1.Level.ToString().PadLeft(2),24,' '));
+            sList.Add(this.RemakeWide("HP:  " + c1.RecentHP.ToString().PadLeft(4) + "/" + c1.HP ,24,' '));
+            sList.Add(this.RemakeWide("[" + (new string('▮', (int)Math.Floor((double)(((double)c1.RecentHP / c1.HP) * 20)))).PadRight(20) + "]", 24, ' '));
             return sList;
         }
     }

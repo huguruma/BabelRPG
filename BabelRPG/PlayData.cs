@@ -22,9 +22,9 @@ namespace BabelRPG
         public int MaxFloor=1;
         private Dictionary<string, double[]> jobTypes =new Dictionary<string, double[]> 
         { 
-            {"Attack",new double[] {6,10,4,2 } },
-            {"Deffence",new double[] {6,4,8,4 } },
-            {"Speed",new double[] {4,6,2,10 } },
+            {"Attack",new double[] {4,6,4,3 } },
+            {"Deffence",new double[] {5,4,5,4 } },
+            {"Speed",new double[] {3,5,4,6 } },
         };
 
         public PlayData(bool isNewGame, ItemManager iMng, CharaManager cMng,string name ="",string jobType="")
@@ -35,7 +35,7 @@ namespace BabelRPG
             {
                 this.Name = name;
                 this.JobType = jobType;
-                this.MyCharas.Add(this.Hero=this.makeHero(this.Name, 600, "", jobType));
+                this.MyCharas.Add(this.Hero=this.makeHero(this.Name, 1500, "", jobType));
             }
             else 
             {
@@ -90,7 +90,7 @@ namespace BabelRPG
                 i1 = IMng.AllItems.Find(x => x.Name == equip).Clone();
             }
             return new Chara(name, exp,
-                100, 50, 50, 50, i1, this.jobTypes[jobType]);
+                50, 20, 20, 20, i1, this.jobTypes[jobType]);
         }
 
         public void SaveData()
@@ -98,7 +98,7 @@ namespace BabelRPG
             string playDataList = string.Join(",",new string[] { this.Name, this.Hero.Exp.ToString(),this.Hero.Equip.Name,this.JobType,this.MaxFloor.ToString()});
             List<Item> keyList = this.MyItems.Keys.ToList();
             List<string> ItemDataList = keyList.Select(x => string.Join(",",new string[] { x.Name, this.MyItems[x].ToString() }) ).ToList();
-             List<Chara> cList = this.MyCharas.Select(x=>x).ToList();
+            List<Chara> cList = this.MyCharas.Select(x=>x).ToList();
             cList.Remove(this.Hero);
             List<string> CharaDataList = cList.Select(x => string.Join(",", new string[] { x.Name, x.Exp.ToString(), x.Equip.Name })).ToList();
             File.WriteAllText("../../data/PlayData.csv", playDataList);
@@ -169,18 +169,31 @@ namespace BabelRPG
                     }
                     else
                     {
-                        log += c1.Name + "は" + (c1.HP - i1.BonusParams[0]) + "回復。\r\n";
+                        log += c1.Name + "は" + (c1.HP - c1.RecentHP) + "回復。\r\n";
                         c1.RecentHP = c1.HP;
                         this.DecItem(i1.Name);
                     }
                 }
                 else
                 {
-                    int pastHP = c1.HP;
-                    log += c1.Name + "は10000Exp獲得した！";
-                    c1.Exp += 10000;
-                    c1.RecentHP += c1.HP - pastHP;
-                    this.DecItem(i1.Name);
+                    int pastHP = 0;
+                    switch (i1.Name)
+                    {
+                        case "不思議な薬":
+                            pastHP = c1.HP;
+                            log += c1.Name + "は10000Exp獲得した！";
+                            c1.Exp += 10000;
+                            c1.RecentHP += c1.HP - pastHP;
+                            this.DecItem(i1.Name);
+                            break;
+                        case "貴重な薬":
+                            pastHP = c1.HP;
+                            log += c1.Name + "は80000Exp獲得した！";
+                            c1.Exp += 80000;
+                            c1.RecentHP += c1.HP - pastHP;
+                            this.DecItem(i1.Name);
+                            break;
+                    }
                 }
             }
             else if(i1.ItemType == 1) 

@@ -56,10 +56,20 @@ namespace BabelRPG
 
         public int PopCount(int floor)
         {
-            int baseCount = 1;
             Random random = new Random();
-            baseCount += (int)(floor / 20);
-            return baseCount+random.Next(3)>5 ?5: baseCount + random.Next(3);
+            int baseCount = 1+(int)(floor / 20);
+            for (int i = 0; i < 3; i++) {
+                if (random.Next(2) == 0)
+                {
+                    baseCount++;
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return baseCount>5 ?5: baseCount ;
         }
 
         public List<Creature> EncountCreatures(int floor)
@@ -75,7 +85,7 @@ namespace BabelRPG
             }
             for (int i = 0; i < allCreatures.Count();i++)
             {
-                for(int j = 0; j <= allCreatures.Count - i; j++)
+                for(int j = 0; j <allCreatures.Count - i; j++)
                 {
                     creatureMaps.Add(i);
                 }

@@ -80,7 +80,7 @@ namespace BabelRPG
                     sList.Add(this.GetString(i));
                 }
             }
-            sList.Add((this.MyItems.Count() - 1 == this.Index ? "▽ " : "▼ ") + "----------------------------------------");
+            sList.Add((this.MyItems.Count() - 1 == this.Index ? "▽ " : "▼ ") + "----------------------------"+(this.BattleFlg?"":"------------"));
 
             return string.Join("\r\n",sList);
         }
