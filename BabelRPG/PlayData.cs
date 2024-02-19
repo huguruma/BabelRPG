@@ -20,6 +20,7 @@ namespace BabelRPG
         public ItemManager IMng;
         public CharaManager CMng;
         public int MaxFloor=1;
+
         private Dictionary<string, double[]> jobTypes =new Dictionary<string, double[]> 
         { 
             {"Attack",new double[] {4,6,4,3 } },

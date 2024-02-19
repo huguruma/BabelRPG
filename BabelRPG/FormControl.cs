@@ -48,16 +48,6 @@ namespace BabelRPG
             this.Win.Text = this.MsgWin + "\r\n" + this.Attension;
             this.Attension = "";
         }
-        private void DisplayField()
-        {
-
-            this.Field.Text = this.Head + "\r\n\r\n" + this.Body;
-        }
-
-        private void DisplayMsgWin()
-        {
-            this.Win.Text = this.MsgWin;
-        }
 
         private void SetButton(string b1,string b2="",string b3="",string b4="",string b5="",string b6 = "")
         {
@@ -748,7 +738,7 @@ namespace BabelRPG
 
         public void Tower6()
         {
-            this.Body = string.Join("\r\n", "\r\n" + this.GameController.BMng.GetImage(), this.IMM.GetImage(), "\r\n"+this.GameController.PData.ShowAllStatus());
+            this.Body += "\r\n\r\n"+this.GameController.PData.ShowAllStatus();
             this.DisplayGame();
             this.SetButton("戻る");
             this.next = this.Tower3;
@@ -1092,6 +1082,7 @@ namespace BabelRPG
                     this.Tower5();
                     break;
                 case 3:
+                    this.Tower6();
                     break;
                 case 4:
                     this.Tower7();
